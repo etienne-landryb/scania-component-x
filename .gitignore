@@ -1,0 +1,31 @@
+# Generated data and caches -- never commit these.
+# The Parquet caches are gigabytes; GitHub rejects files over 100 MB.
+cache/
+*.parquet.bak
+*.npy
+model.pkl
+
+# Raw dataset (download separately from the IDA 2024 challenge, CC BY 4.0)
+data/
+*.csv
+!demo/*.csv
+
+# Python
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# Editors / OS / antivirus
+.vscode/
+.idea/
+.spyproject/
+_avast_/
+.DS_Store
+Thumbs.db
+
+# The demo bundle IS committed -- it is what the deployed app reads.
+!demo/
+!demo/vehicles.parquet
+!demo/meta.json

@@ -1,0 +1,100 @@
+{
+  "benchmark": {
+    "test_vehicles": 5045,
+    "model_total_cost": 33994.0,
+    "naive_total_cost": 56100.0,
+    "inspect_all_total_cost": 49671.0,
+    "pct_below_naive": 39.4,
+    "pct_below_inspect_all": 31.6,
+    "class4_recall": 0.8,
+    "class4_missed_as_healthy": 12
+  },
+  "cost_matrix": [
+    [
+      0.0,
+      7.0,
+      8.0,
+      9.0,
+      10.0
+    ],
+    [
+      200.0,
+      0.0,
+      7.0,
+      8.0,
+      9.0
+    ],
+    [
+      300.0,
+      200.0,
+      0.0,
+      7.0,
+      8.0
+    ],
+    [
+      400.0,
+      300.0,
+      200.0,
+      0.0,
+      7.0
+    ],
+    [
+      500.0,
+      400.0,
+      300.0,
+      200.0,
+      0.0
+    ]
+  ],
+  "top_features": [
+    {
+      "feature": "last_666_0",
+      "gain": 11875.986813306808
+    },
+    {
+      "feature": "meta_age_at_cut",
+      "gain": 6964.298083424568
+    },
+    {
+      "feature": "last_459_9",
+      "gain": 6203.012345910072
+    },
+    {
+      "feature": "last_158_8",
+      "gain": 3878.525369286537
+    },
+    {
+      "feature": "spec_Spec_1",
+      "gain": 3285.9125150442123
+    },
+    {
+      "feature": "last_397_3",
+      "gain": 3155.5596795082092
+    },
+    {
+      "feature": "last_397_27",
+      "gain": 3152.1557195186615
+    },
+    {
+      "feature": "rate_459_9",
+      "gain": 2882.264628767967
+    },
+    {
+      "feature": "rate_167_0",
+      "gain": 2856.817239165306
+    },
+    {
+      "feature": "share_291_2",
+      "gain": 2603.06210565567
+    },
+    {
+      "feature": "share_459_14",
+      "gain": 2547.010574579239
+    },
+    {
+      "feature": "share_397_6",
+      "gain": 2354.6885781288147
+    }
+  ],
+  "calibration_method": "prior_shift"
+}
