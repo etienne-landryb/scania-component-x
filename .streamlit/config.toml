@@ -1,0 +1,12 @@
+# The app has a deliberate light "workshop worklist" palette. Pinning the theme
+# here keeps the designed colours instead of inheriting Streamlit's dark mode,
+# which washes the custom HTML out.
+[theme]
+base = "light"
+primaryColor = "#A8200D"
+backgroundColor = "#E4E7E9"
+secondaryBackgroundColor = "#F4F6F7"
+textColor = "#15181B"
+
+[client]
+toolbarMode = "minimal"
