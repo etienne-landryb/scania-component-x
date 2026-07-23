@@ -44,8 +44,23 @@ CSS = """
   --muted:#6B7378; --urgent:#A8200D; --watch:#B87309; --clear:#2F5D43;
 }
 
-.stApp{ background:var(--paper); }
+.stApp{ background:var(--paper) !important; }
 html, body, [class*="css"]{ font-family:'IBM Plex Sans',system-ui,sans-serif; color:var(--ink); }
+
+/* The palette above is the design. If a visitor forces dark mode, Streamlit
+   recolours its own text and the custom HTML washes out -- so pin the text
+   colours that matter. Chips and bars keep their own colours (not overridden). */
+.stApp, .stApp p, .stApp label, .stApp h1, .stApp h2, .stApp h3,
+[data-testid="stMarkdownContainer"], [data-testid="stMarkdownContainer"] *:not(.chip),
+[data-testid="stMetricValue"], [data-testid="stMetricLabel"],
+[data-testid="stSidebar"] p, [data-testid="stSidebar"] label,
+[data-testid="stSidebar"] [data-testid="stMarkdownContainer"]{
+  color:var(--ink);
+}
+[data-testid="stMetricValue"]{ font-family:'IBM Plex Mono',monospace; }
+[data-testid="stSelectbox"] div[data-baseweb="select"] > div{
+  background:var(--card); border-color:var(--rule); color:var(--ink);
+}
 
 /* ---- masthead ---- */
 .mast{ border-bottom:2px solid var(--ink); padding:.2rem 0 .7rem; margin-bottom:1.1rem; }
@@ -225,7 +240,7 @@ st.markdown(f"""
     <div class='v'>{b['inspect_all_total_cost']:,.0f}</div></div>
   <div class='cell'><div class='k'>Cost avoided</div>
     <div class='v good'>{b['pct_below_naive']}%</div></div>
-  <div class='cell'><div class='k'>Imminent failures caught</div>
+  <div class='cell'><div class='k'>Failures caught, unconstrained</div>
     <div class='v'>{b['class4_recall']*100:.0f}%</div></div>
 </div>""", unsafe_allow_html=True)
 
@@ -235,10 +250,12 @@ st.markdown(f"""
 st.markdown("<div class='sect'>This week's plan</div>", unsafe_allow_html=True)
 
 c1, c2, c3 = st.columns(3)
-c1.metric("Trucks going in", f"{len(worklist)}", f"of {n_fleet} in the fleet")
+c1.metric("Trucks going in", f"{len(worklist)}",
+          f"of {n_fleet} in the fleet", delta_color="off")
 c2.metric("Cost with this plan", f"{realised:,.0f}",
           f"{realised - nothing_cost:,.0f} vs doing nothing", delta_color="inverse")
-c3.metric("Imminent failures caught", f"{caught} / {total_urgent}")
+c3.metric("Caught within this capacity", f"{caught} / {total_urgent}",
+          "unconstrained model catches 80%", delta_color="off")
 
 rows = []
 for rank, i in enumerate(worklist, start=1):
