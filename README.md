@@ -1,4 +1,4 @@
-# Component X — Cost-Sensitive Predictive Maintenance
+# Component X - Cost-Sensitive Predictive Maintenance
 
 Predicting imminent failure of an engine component in heavy-duty SCANIA trucks,
 and turning that prediction into the **cheapest maintenance decision** rather
