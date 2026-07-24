@@ -30,73 +30,68 @@ st.set_page_config(page_title="Component X — Fleet Triage",
 
 # --------------------------------------------------------------------------- #
 # Design tokens
-#   Palette: cool machine greys + industrial signal colours. Deliberately not a
-#   warm-paper/serif treatment -- this is a workshop terminal, not a magazine.
 #   Type: IBM Plex, drawn for engineering interfaces. Condensed for signage-like
 #   headers, Mono for every number so columns align like a printed worklist.
+#
+#   Colour is deliberately theme-agnostic so Streamlit's own System/Light/Dark
+#   switch keeps working. Instead of fixed greys, panels and rules use
+#   TRANSLUCENT neutrals -- rgba(128,138,145,a) sits slightly darker than a light
+#   background and slightly lighter than a dark one, so one rule serves both.
+#   Body text inherits Streamlit's text colour; muted text is opacity, not grey.
+#   Only the three signal colours are fixed, chosen at a luminance that stays
+#   legible on either ground.
 # --------------------------------------------------------------------------- #
 CSS = """
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap');
 
 :root{
-  --ink:#15181B; --paper:#E4E7E9; --card:#F4F6F7; --rule:#C3C9CD;
-  --muted:#6B7378; --urgent:#A8200D; --watch:#B87309; --clear:#2F5D43;
+  --urgent:#B93415; --urgent2:#8C2710; --watch:#C4820C; --clear:#3D8B5F;
+  --panel:rgba(128,138,145,.10);
+  --rule:rgba(128,138,145,.38);
+  --hairline:rgba(128,138,145,.20);
+  --track:rgba(128,138,145,.22);
+  --fill:rgba(128,138,145,.70);
 }
 
-.stApp{ background:var(--paper) !important; }
-html, body, [class*="css"]{ font-family:'IBM Plex Sans',system-ui,sans-serif; color:var(--ink); }
-
-/* The palette above is the design. If a visitor forces dark mode, Streamlit
-   recolours its own text and the custom HTML washes out -- so pin the text
-   colours that matter. Chips and bars keep their own colours (not overridden). */
-.stApp, .stApp p, .stApp label, .stApp h1, .stApp h2, .stApp h3,
-[data-testid="stMarkdownContainer"], [data-testid="stMarkdownContainer"] *:not(.chip),
-[data-testid="stMetricValue"], [data-testid="stMetricLabel"],
-[data-testid="stSidebar"] p, [data-testid="stSidebar"] label,
-[data-testid="stSidebar"] [data-testid="stMarkdownContainer"]{
-  color:var(--ink);
-}
-[data-testid="stMetricValue"]{ font-family:'IBM Plex Mono',monospace; }
-[data-testid="stSelectbox"] div[data-baseweb="select"] > div{
-  background:var(--card); border-color:var(--rule); color:var(--ink);
-}
+html, body, [class*="css"]{ font-family:'IBM Plex Sans',system-ui,sans-serif; }
 
 /* ---- masthead ---- */
-.mast{ border-bottom:2px solid var(--ink); padding:.2rem 0 .7rem; margin-bottom:1.1rem; }
+.mast{ border-bottom:2px solid currentColor; padding:.2rem 0 .7rem; margin-bottom:1.1rem; }
 .mast h1{
   font-family:'IBM Plex Sans Condensed',sans-serif; font-weight:700;
   font-size:2.35rem; letter-spacing:.02em; text-transform:uppercase;
-  margin:0; line-height:1.05;
+  margin:0; line-height:1.05; color:inherit;
 }
 .mast .sub{ font-family:'IBM Plex Mono',monospace; font-size:.78rem;
-  color:var(--muted); letter-spacing:.04em; margin-top:.35rem; }
+  opacity:.62; letter-spacing:.04em; margin-top:.35rem; }
 
 /* ---- benchmark strip ---- */
-.bench{ display:flex; gap:0; border:1px solid var(--rule); background:var(--card);
+.bench{ display:flex; gap:0; border:1px solid var(--rule); background:var(--panel);
   margin-bottom:1.4rem; flex-wrap:wrap; }
 .bench .cell{ flex:1 1 150px; padding:.7rem .9rem; border-right:1px solid var(--rule); }
 .bench .cell:last-child{ border-right:none; }
 .bench .k{ font-family:'IBM Plex Mono',monospace; font-size:.66rem;
-  letter-spacing:.09em; text-transform:uppercase; color:var(--muted); }
+  letter-spacing:.09em; text-transform:uppercase; opacity:.62; }
 .bench .v{ font-family:'IBM Plex Mono',monospace; font-size:1.5rem;
-  font-weight:600; line-height:1.25; }
+  font-weight:600; line-height:1.25; color:inherit; }
 .bench .v.good{ color:var(--clear); }
 
 /* ---- section headings ---- */
 .sect{ font-family:'IBM Plex Sans Condensed',sans-serif; font-weight:700;
   text-transform:uppercase; letter-spacing:.05em; font-size:1.05rem;
-  border-bottom:1px solid var(--ink); padding-bottom:.3rem; margin:1.5rem 0 .8rem; }
+  border-bottom:1px solid currentColor; padding-bottom:.3rem; margin:1.5rem 0 .8rem; }
 
 /* ---- worklist ---- */
 table.wl{ width:100%; border-collapse:collapse; font-family:'IBM Plex Mono',monospace;
-  font-size:.82rem; background:var(--card); }
+  font-size:.82rem; background:var(--panel); }
 table.wl th{ text-align:left; font-size:.64rem; letter-spacing:.09em;
-  text-transform:uppercase; color:var(--muted); font-weight:500;
+  text-transform:uppercase; opacity:.62; font-weight:500;
   border-bottom:1px solid var(--rule); padding:.45rem .6rem; }
-table.wl td{ padding:.42rem .6rem; border-bottom:1px solid #DCE0E3; }
+table.wl td{ padding:.42rem .6rem; border-bottom:1px solid var(--hairline);
+  color:inherit; }
 table.wl tr:last-child td{ border-bottom:none; }
-.rank{ color:var(--muted); }
+.rank{ opacity:.55; }
 .vid{ font-weight:600; }
 .num{ text-align:right; }
 
@@ -105,34 +100,32 @@ table.wl tr:last-child td{ border-bottom:none; }
   letter-spacing:.06em; text-transform:uppercase; font-weight:600;
   border:1px solid currentColor; }
 .chip.urgent{ color:#fff; border-color:var(--urgent);
-  background-image:repeating-linear-gradient(45deg,var(--urgent) 0 7px,#8E1A0A 7px 14px); }
+  background-image:repeating-linear-gradient(45deg,var(--urgent) 0 7px,var(--urgent2) 7px 14px); }
 .chip.watch{ color:var(--watch); }
 .chip.clear{ color:var(--clear); }
 
 /* ---- decision bar : the signature element ---- */
-.dec{ background:var(--card); border:1px solid var(--rule); padding:.9rem 1rem; }
+.dec{ background:var(--panel); border:1px solid var(--rule); padding:.9rem 1rem; }
 .dec .r{ display:flex; align-items:center; gap:.7rem; margin:.3rem 0; }
 .dec .lbl{ font-family:'IBM Plex Mono',monospace; font-size:.74rem;
-  width:12.5rem; color:var(--muted); }
-.dec .bar{ flex:1; height:15px; background:#DCE0E3; position:relative; }
-.dec .bar i{ position:absolute; inset:0 auto 0 0; background:#9AA3A8; display:block; }
-.dec .r.chosen .lbl{ color:var(--ink); font-weight:600; }
+  width:12.5rem; opacity:.62; }
+.dec .bar{ flex:1; height:15px; background:var(--track); position:relative; }
+.dec .bar i{ position:absolute; inset:0 auto 0 0; background:var(--fill); display:block; }
+.dec .r.chosen .lbl{ opacity:1; font-weight:600; }
 .dec .r.chosen .bar i{ background:var(--urgent); }
 .dec .val{ font-family:'IBM Plex Mono',monospace; font-size:.78rem;
-  width:4.4rem; text-align:right; }
-.verdict{ font-family:'IBM Plex Sans Condensed',sans-serif; font-weight:700;
-  text-transform:uppercase; letter-spacing:.04em; font-size:1rem;
-  margin:.9rem 0 .2rem; }
+  width:4.4rem; text-align:right; color:inherit; }
 .disagree{ border-left:3px solid var(--urgent); padding:.55rem .8rem;
-  background:#F6ECEA; font-size:.87rem; margin-top:.7rem; }
+  background:rgba(185,52,21,.12); font-size:.87rem; margin-top:.7rem; color:inherit; }
 .agree{ border-left:3px solid var(--rule); padding:.55rem .8rem;
-  background:var(--card); font-size:.87rem; margin-top:.7rem; }
+  background:var(--panel); font-size:.87rem; margin-top:.7rem; color:inherit; }
 
-.note{ font-size:.8rem; color:var(--muted); }
-[data-testid="stSidebar"]{ background:var(--card); border-right:1px solid var(--rule); }
+.note{ font-size:.8rem; opacity:.62; }
+[data-testid="stMetricValue"]{ font-family:'IBM Plex Mono',monospace; }
 </style>
 """
 st.markdown(CSS, unsafe_allow_html=True)
+
 
 CLASS_WINDOW = {
     0: "No failure signal",
