@@ -1,12 +1,12 @@
-# The app has a deliberate light "workshop worklist" palette. Pinning the theme
-# here keeps the designed colours instead of inheriting Streamlit's dark mode,
-# which washes the custom HTML out.
+# Defaults for Streamlit's own widgets. The app ships two designed palettes and
+# a Display toggle in the sidebar; these values match the dark one so the native
+# chrome agrees with the default choice on first paint.
 [theme]
-base = "light"
-primaryColor = "#A8200D"
-backgroundColor = "#E4E7E9"
-secondaryBackgroundColor = "#F4F6F7"
-textColor = "#15181B"
+base = "dark"
+primaryColor = "#D9481F"
+backgroundColor = "#141719"
+secondaryBackgroundColor = "#1D2124"
+textColor = "#E7EAEC"
 
 [client]
 toolbarMode = "minimal"
