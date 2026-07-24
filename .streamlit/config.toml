@@ -1,12 +1,5 @@
-# Defaults for Streamlit's own widgets. The app ships two designed palettes and
-# a Display toggle in the sidebar; these values match the dark one so the native
-# chrome agrees with the default choice on first paint.
-[theme]
-base = "dark"
-primaryColor = "#D9481F"
-backgroundColor = "#141719"
-secondaryBackgroundColor = "#1D2124"
-textColor = "#E7EAEC"
-
+# Streamlit's own System / Light / Dark switch stays fully in charge of colour.
+# The app's stylesheet uses translucent neutrals and inherited text colour, so it
+# follows whichever theme the visitor picks. Nothing here pins a palette.
 [client]
-toolbarMode = "minimal"
+toolbarMode = "auto"
