@@ -4,7 +4,7 @@ Predicting imminent failure of an engine component in heavy-duty SCANIA trucks,
 and turning that prediction into the **cheapest maintenance decision** rather
 than the most likely one.
 
-**[Live app](YOUR_STREAMLIT_URL)** · Data: [SCANIA Component X, IDA 2024 Industrial Challenge](https://arxiv.org/abs/2401.15199) (CC BY 4.0)
+**[Live app](https://scania-component-x-hxtfgmmnhlkitgtezykrao.streamlit.app/)** · Data: [SCANIA Component X, IDA 2024 Industrial Challenge](https://arxiv.org/abs/2401.15199) (CC BY 4.0)
 
 ---
 
