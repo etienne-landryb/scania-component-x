@@ -30,8 +30,8 @@ the model assigns a class from 0 (no failure signal) to 4 (failure within 6
 time units). 97% of vehicles are class 0.
 
 Crucially, the scoring is **asymmetric**: calling an imminent failure healthy
-costs 500, while an unnecessary workshop check costs 7–10. Accuracy is the
-wrong objective — a model that predicts "healthy" every time scores 97%
+costs 500, while an unnecessary workshop check costs 7-10. Accuracy is the
+wrong objective - a model that predicts "healthy" every time scores 97%
 accuracy and is worthless.
 
 ## Approach
@@ -43,7 +43,7 @@ are structurally excluded from the feature matrix to prevent leakage.
 **Features.** Validation and test give one row per vehicle at a randomly chosen
 "last readout", so training examples are built to match: sample a cut point,
 summarise only readouts up to it, label with that readout's class. Four blocks
-per example — current values, long-run accumulation rate, recent rate (which
+per example - current values, long-run accumulation rate, recent rate (which
 catches acceleration near failure), and histogram *shape* normalised to
 proportions so usage intensity doesn't dominate.
 
@@ -65,18 +65,18 @@ minimises expected cost under the cost matrix:
 E[cost | action m] = Σ_n  P(class n | x) · Cost[n][m]
 ```
 
-This is why the imbalance is *not* handled by resampling — resampling distorts
+This is why the imbalance is *not* handled by resampling - resampling distorts
 the probabilities this rule depends on.
 
 ## Findings worth noting
 
 **The economics collapse the label space.** The model almost never predicts
-classes 1–3. Predicting "urgent" on a healthy truck costs 10; predicting
+classes 1-3. Predicting "urgent" on a healthy truck costs 10; predicting
 "schedule soon" on a truck about to fail costs 200. Hedging toward action
 dominates, so a five-class problem becomes a binary operational decision.
 
 **The decision layer carries the result, not the classifier.** Argmax scores
-54,927 — barely below the naive baseline, because with a 97% majority class a
+54,927 - barely below the naive baseline, because with a 97% majority class a
 probability-maximising rule almost never predicts a minority class. Nearly all
 the gain comes from the cost arithmetic.
 
@@ -109,7 +109,7 @@ pipeline/           the offline pipeline, in run order
 ```
 
 The pipeline runs locally against the ~1.2 GB dataset; the app never touches it.
-Probabilities are precomputed so the deployed app needs no ML dependencies —
+Probabilities are precomputed so the deployed app needs no ML dependencies -
 the decision layer, which is this project's contribution, stays fully live.
 
 ## Running it
