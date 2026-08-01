@@ -123,3 +123,13 @@ streamlit run app.py
 pip install -r requirements-pipeline.txt
 python pipeline/run_phase1.py && python pipeline/run_phase2.py && python pipeline/run_phase3.py
 ```
+
+## Built by
+
+**Etienne Landry Bessala**
+etienne.landry.bessala@gmail.com
+
+
+## License
+
+MIT
